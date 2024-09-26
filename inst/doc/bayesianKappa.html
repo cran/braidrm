@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Bayesian Stabilization of kappa</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Bayesian Stabilization of kappa</h1>
+
+
+
+<div id="the-problem" class="section level2">
+<h2>The Problem</h2>
+<p>One of the long-standing limitations of the BRAID model (and indeed
+any parametric response model) is how to handle conditions in which one
+or both of the compounds show little to no activity. Synergy, in the
+pharmacological sense, is a circumstance in which a combination is more
+potent than one would expect based on its individual behaviors. But what
+does synergy look like when one of the compounds does nothing? A more
+potent nothing is still … nothing. Even in cases where the compound does
+show activity, if the concentrations tested lie too far below a
+compound’s dose of median effect, that activity will be virtually
+undetectable. This results in many experiments where the value of the
+response surface parameters, including the interaction parameter <span class="math inline">\(\kappa\)</span>, are severely
+under-determined.</p>
+<p>Take the example dataset <code>incompleteExample</code>. This dataset
+represents a checkerboard of measurements tested at concentrations
+between 0.125 and 8, in which the second compound has a dose of median
+effect of 100, well above the range tested; in addition, the maximal
+effect of this compound is just 10% that of the first compound, barely
+distinguishable from noise. This results in an experiment in which
+effect of the second compound is virtually identical to no effect at
+all:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>surface <span class="ot">&lt;-</span> incompleteExample</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">head</span>(surface)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt;   concA concB        truth     measure</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; 1     0 0.000 0.000000e+00 -0.15606079</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; 2     0 0.125 1.953124e-10  0.02695926</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; 3     0 0.250 1.562500e-09  0.09197325</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; 4     0 0.500 1.250000e-08  0.04886825</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co">#&gt; 5     0 1.000 9.999990e-08 -0.02517647</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co">#&gt; 6     0 2.000 7.999936e-07  0.05633097</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">head</span>(surface[surface<span class="sc">$</span>concA<span class="sc">==</span><span class="dv">0</span>,])</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt;   concA concB        truth     measure</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; 1     0 0.000 0.000000e+00 -0.15606079</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; 2     0 0.125 1.953124e-10  0.02695926</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; 3     0 0.250 1.562500e-09  0.09197325</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 4     0 0.500 1.250000e-08  0.04886825</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 5     0 1.000 9.999990e-08 -0.02517647</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 6     0 2.000 7.999936e-07  0.05633097</span></span></code></pre></div>
+<p>This surface was generated with the parameter vector show below in
+<code>trueParameter</code>, and indeed we find that the
+root-mean-squared error between this ideal model and the measured data
+is quite low:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>trueParameter <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>, <span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>trueSurface <span class="ot">&lt;-</span> <span class="fu">evalBraidModel</span>(surface<span class="sc">$</span>concA,surface<span class="sc">$</span>concB,trueParameter)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>trueError <span class="ot">&lt;-</span> surface<span class="sc">$</span>measure <span class="sc">-</span> trueSurface</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>(trueError<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; [1] 0.07134428</span></span></code></pre></div>
+<p>But when we fit the data with an unstabilized BRAID model, the
+resulting parameter vector is quite different:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>bfit <span class="ot">&lt;-</span> <span class="fu">braidrm</span>(measure<span class="sc">~</span>concA<span class="sc">+</span>concB,surface, <span class="at">prior=</span><span class="st">&quot;none&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">coef</span>(bfit)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;        IDMA        IDMB          na          nb       kappa          E0 </span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;  0.99296695  0.01562500  3.37707860  0.10000000  3.42699253 -0.06870641 </span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;         EfA         EfB          Ef </span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;  0.98140872  0.05492163  0.98140872</span></span></code></pre></div>
+<p>The best fitting model is one in which the dose of median effect of
+the second drug is actually quite <em>low</em>, the maximal effect of
+the second drug is even lower than before, and the surface exhibits a
+synergistic interaction with a <span class="math inline">\(\kappa\)</span> over 3. Despite this disagreement
+with the original parametric representation, this BRAID model actually
+fits the data <em>more</em> closely:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>(<span class="fu">resid</span>(bfit)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.06746923</span></span></code></pre></div>
+<p>The severity of the issue is made even more clear by examining the
+confidence intervals on the parameters:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">summary</span>(bfit)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; braidrm.formula(formula = measure ~ concA + concB, data = surface, </span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;     prior = &quot;none&quot;)</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;            Lo     Est      Hi</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; IDMA   0.8834  0.9930  1.1074</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; IDMB   0.0156  0.0156 64.0000</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; na     2.5259  3.3771  4.7430</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; nb     0.1000  0.1000 10.0000</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; kappa -1.3593  3.4270 39.6485</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; E0    -0.1416 -0.0687  0.0103</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; EfA    0.9501  0.9814  1.0187</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; EfB   -0.0209  0.0549  1.0109</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; Ef         NA  0.9814      NA</span></span></code></pre></div>
+<p>Consider the precise meaning of the confidence interval on <span class="math inline">\(\kappa\)</span> here. These are bootstrapped
+confidence intervals chosen by resampling residuals (see
+<code>vignette(&quot;confidenceIntervals&quot;)</code>), so a confidence interval
+ranging from -1.36 (indicating very pronounced antagonism) to 39.6
+(<em>extremely</em> high synergy) means that if a new experiment with
+the same pattern of errors or residuals were run with this underlying
+response surface, the best-fit values of <span class="math inline">\(\kappa\)</span> would lie in this range 95% of the
+time; more importantly they would lie <em>outside</em> this range up to
+5% of the time. One out of every twenty runs would be best fit by an
+extreme value of <span class="math inline">\(\kappa\)</span>. In fact,
+in practice, the frequency of this outcome is even higher, as slight
+patterns of noise in under-determined surfaces are often best explained
+by extreme variations in <span class="math inline">\(\kappa\)</span>.</p>
+<p>Of course, in some cases, this is hardly an issue; the reason these
+variations occur is because all the values explain the data nearly
+equally well; so predictions and quantitative measures of combination
+activity within the range tested would still be quite stable. But if one
+hopes to draw meaningful conclusions from the value of <span class="math inline">\(\kappa\)</span>, or compare <span class="math inline">\(\kappa\)</span> across a large set of comparable
+experiments, this instability can be extremely frustrating.</p>
+</div>
+<div id="the-solution-bayesian-stabilization" class="section level2">
+<h2>The Solution: Bayesian Stabilization</h2>
+<p>When we began updating the BRAID code for this package, addressing
+this instability was one of our chief concerns. We have worked with many
+analyses intended to tease out the drivers of synergy and antagonism,
+represented quantitiatively by <span class="math inline">\(\kappa\)</span>, and this can be much more
+difficult to do if many of the most extreme values of <span class="math inline">\(\kappa\)</span> are nothing more than noise. So
+with the updated fits, we wanted to operate by the following principle:
+a large value of <span class="math inline">\(\kappa\)</span> should
+correspond to a large or significant deviation. Put another way, extreme
+<span class="math inline">\(\kappa\)</span> values should only be fit
+when there is sufficient evidence to support them. The most
+straightforward way for us to do this was to introduce a Bayesian prior
+on the value of <span class="math inline">\(\kappa\)</span>.</p>
+<p>The derivation goes as follows. Suppose we assume that our measured
+response surface is drawn from a normal noise distribution around the
+true response surface, so the likelihood of a given set of measurements
+is:</p>
+<p><span class="math display">\[
+L(\{x_i\}) =
+\prod_{i}{N(x_i-y_i,\sigma^2)}=\prod_i{\frac{1}{\sqrt{2\pi\sigma^2}}}\exp\left(-\frac{(x_i-y_i)^2}{2\sigma^2}\right)
+\]</span></p>
+<p>where <span class="math inline">\(y_i\)</span> is the predicted
+effect at a given point based on the current set of parameters.
+Maximizing this likelihood reduces to minimizing the sum of squared
+errors, hence the traditional approach to fitting. Introducing a prior,
+however, requires maximizing not the likelihood of the data given the
+parameters, but maximizing the posterior probability of the parameters
+given the data <em>and</em> the prior probabilities for those
+parameters. According to Bayes rule:</p>
+<p><span class="math display">\[
+P(\theta|\{x_i\}) \propto L(\{x_i\}|\theta)P(\theta)
+\]</span></p>
+<p>where <span class="math inline">\(\theta\)</span> is just a
+representation of a particular set of parameters and <span class="math inline">\(P(\theta)\)</span> is the prior distribution on
+those parameters. We have no reason to add in priors to the other
+parameters of our response surface, so we assume that the prior
+distribution on them is effectively uniform, so for our purposes, <span class="math inline">\(P(\theta) = P(\kappa)\)</span>, and the objective
+function that we want to maximize is:</p>
+<p><span class="math display">\[
+O(\theta) =
+P(\kappa)\cdot\prod_i{\frac{1}{\sqrt{2\pi\sigma^2}}}\exp\left(-\frac{(x_i-y_i)^2}{2\sigma^2}\right)
+\]</span></p>
+<p>As with many probability models, it is much easier to
+<em>minimize</em> the negative logarithm of this function than to
+maximize the function directly, so the loss function we seek to minimize
+partially reduces to:</p>
+<p><span class="math display">\[
+L(\theta) = -\log{P(\kappa)} +
+\frac{N}{2}\log{2\pi\sigma^2}+\frac{1}{2\sigma^2}\sum_i{(x_i-y_i)^2}
+\]</span></p>
+<p>Because <span class="math inline">\(\sigma^2\)</span> is a property
+of the experiment and not impacted by the parameters of our response
+surface, minimizing this loss is equivalent to minimizing a similar
+expression in which the second term has been canceled out and the whole
+expression has been multiplied by <span class="math inline">\(2\sigma^2\)</span>, giving:</p>
+<p><span class="math display">\[
+L&#39;(\theta) = \sum_i{(x_i-y_i)^2} - 2\sigma^2\log{P(\kappa)}
+\]</span></p>
+<p>There! So maximizing the posterior amounts to minimizing the sum of
+squared errors <em>with an extra term</em> representing the loss from
+the prior on <span class="math inline">\(\kappa\)</span>.</p>
+<p>Of course, this means that to add Bayesian stabilization of <span class="math inline">\(\kappa\)</span> we need two values that we would
+not have included in a traditional least-squares fit: <span class="math inline">\(\sigma^2\)</span>, representing the variance of
+measurement noise, and <span class="math inline">\(P(\kappa)\)</span>,
+our new Bayesian prior. The simplest way to include <span class="math inline">\(\sigma^2\)</span> is to supply it directly, often
+estimated from some other experimental data, such as the variance of
+measurements in controls. But when such values are not readily
+available, the variance can be estimated more directly by fitting a
+fully agnostic response surface to the data, and taking the average
+deviation. This is what functions like <code>braidrm</code> do by
+default.</p>
+<p>For a prior on <span class="math inline">\(\kappa\)</span>, we chose
+a function that was symmetric in its treatment of synergy and
+antagonism, and adjustable in the severity with which it enforced values
+of <span class="math inline">\(\kappa\)</span> closer to zero. The
+precise definition is:</p>
+<p><span class="math display">\[
+P(\kappa) = \frac{1}{\sqrt{2\pi\eta^2}}\exp{-\frac{\epsilon^2}{2\eta^2}}
+\]</span></p>
+<p>where <span class="math inline">\(\epsilon=\log{(\kappa+2)/2}\)</span> is a
+transformed, symmetrized version of <span class="math inline">\(\kappa\)</span> that goes to negative infinity for
+antagonistic values and infinity for synergistic values; and <span class="math inline">\(\eta\)</span> is a parameter controlling the
+narrowness and severity of the prior. For the default prior in the
+<code>braidrm</code> package (called “moderate”), the value of <span class="math inline">\(\eta\)</span> is simply 1.</p>
+<p>Bringing all these together (and filtering out an additional constant
+term) we have our final, Bayesian stabilized loss function for BRAID
+fitting:</p>
+<p><span class="math display">\[
+L^{*}(\theta) = \sum_i{(x_i-y_i)^2}-\frac{\sigma^2\epsilon^2}{\eta^2}
+\]</span></p>
+</div>
+<div id="using-bayesian-stabilization-in-the-braidrm-package" class="section level2">
+<h2>Using Bayesian Stabilization in the braidrm Package</h2>
+<p>In most cases, the user will (hopefully) not have to consider these
+details at all. Bayesian stabilization is implemented in BRAID fitting
+functions by default, and should quietly hold <span class="math inline">\(\kappa\)</span> values close to zero in cases
+where no evidence of interaction is present. But in the event that one
+<em>does</em> want more precise control of the behavior, several options
+are available. The simplest is the <code>prior</code> parameter in
+fitting functions such as <code>braidrm</code> and
+<code>findBestBraid</code>. By default, this parameter is set to
+<code>&quot;moderate&quot;</code>, which automatically estimates <span class="math inline">\(\sigma^2\)</span> from the data and uses a default
+<span class="math inline">\(\eta\)</span> of 1; setting it to
+<code>&quot;high&quot;</code> decreases <span class="math inline">\(\eta\)</span>
+to <span class="math inline">\(2/3\)</span>, holding <span class="math inline">\(\kappa\)</span> closer to zero, and setting it to
+<code>&quot;mild&quot;</code> increases <span class="math inline">\(\eta\)</span>
+to <span class="math inline">\(3/2\)</span>, allowing <span class="math inline">\(\kappa\)</span> more space. Finally, setting it to
+<code>&quot;none&quot;</code> (as we did in an example above) removes the prior on
+<span class="math inline">\(\kappa\)</span> altogether, and simply fits
+the least-squares model.</p>
+<p>Another option is to specify the prior on <span class="math inline">\(\kappa\)</span> more explicitly using the
+<code>kappaPrior()</code> function. This function produces an object of
+class <code>kappaPrior</code> which can be passed into BRAID fitting
+functions as the <code>prior</code> parameter. It takes two parameters:
+<code>spread</code>, representing the standard deviation of expected
+noise (i.e. <span class="math inline">\(\sigma\)</span>), and
+<code>strength</code>, which is either one of the strings specified
+above, or a numeric value corresponding to the severity of the prior
+(which is actually just <span class="math inline">\(1/\eta\)</span>).
+This function is quite useful if a reliable estimate of the magnitude of
+noise in an experiment is known or can be estimated.</p>
+<p>For example, suppose we have reason to believe that measurements in
+our <code>incompleteExample</code> experiment had a standard noise
+deviation of 0.05. We could then fit our surface using the
+following:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>stableFit <span class="ot">&lt;-</span> <span class="fu">braidrm</span>(measure<span class="sc">~</span>concA<span class="sc">+</span>concB,surface,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                     <span class="at">prior=</span><span class="fu">kappaPrior</span>(<span class="fl">0.05</span>,<span class="st">&quot;moderate&quot;</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>(<span class="fu">resid</span>(stableFit)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; [1] 0.06749826</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">summary</span>(stableFit)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; braidrm.formula(formula = measure ~ concA + concB, data = surface, </span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt;     prior = kappaPrior(0.05, &quot;moderate&quot;))</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt;            Lo     Est      Hi</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; IDMA   0.8742  0.9834  1.0930</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; IDMB   0.0156  0.0156 64.0000</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; na     2.4558  3.3155  4.4585</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; nb     0.1000  0.1000 10.0000</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; kappa -0.7706  2.8375  4.4718</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; E0    -0.1467 -0.0726  0.0105</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; EfA    0.9524  0.9821  1.0234</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; EfB   -0.0193  0.0605  0.9624</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; Ef         NA  0.9821      NA</span></span></code></pre></div>
+<p>This adjusted model fits the data nearly as well as the unstabilized
+model, but the magnitude of <span class="math inline">\(\kappa\)</span>
+is moderately reduced, and more importantly, the confidence intervals
+are much more restrained. In practice, we have found that even moderate
+Bayesian stabilization drastically reduces the incidence of extreme yet
+uninformative <span class="math inline">\(\kappa\)</span> values,
+improving the overall quantitative power of it as a measure of
+interaction.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

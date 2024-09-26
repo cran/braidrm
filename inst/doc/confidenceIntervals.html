@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>BRAID Confidence Intervals</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">BRAID Confidence Intervals</h1>
+
+
+
+<div id="the-reason-for-confidence-intervals" class="section level2">
+<h2>The Reason for Confidence Intervals</h2>
+<p>At it’s heart, the BRAID package is nothing more than a response
+surface equation and a set of tools for picking the version of that
+equation that is as close as possible to measured data. But in
+scientific research, it is often just as important to know how much to
+<em>trust</em> a particular fit as it is to know what that fit is.
+Though many techniques for modeling this trust are available, we have
+long relied on bootstrapped confidence intervals, mostly because they
+are mathematically simple, applicable to a wide range of models, and
+easy to implement on top of existing fitting code.</p>
+<p>Formally, the confidence intervals in the BRAID package are estimated
+by bootstrapping with re-sampled residuals. This means that once a
+response surface is fit, the residuals of that model (the deviations
+between the actual measurements and the model’s prediction) are
+re-sampled and then added to the underlying prediction to produce a
+simulated noisy surface with both the same underlying model and the same
+distribution of errors. This re-sampled surface is fit with the same
+method as the original, and after performing this re-sampling and
+fitting many times, we can estimate the distribution of parameter values
+that would theoretically arise if our model were spot-on. Taking the
+2.5% and 97.5% percentile of these bootstrapped distributions gives our
+estimated confidence interval for each parameter. If the confidence
+interval is narrow, then nearly all surfaces that look like ours will be
+fit with nearly the same value of the parameter, so we can feel
+confident that we are close to the correct value. If the confidence
+interval is wide, then surfaces similar to ours produce a wide variety
+of values for this parameter, and the true parameter may be quite
+different from the one we have fit.</p>
+<p>One of the most common uses we have for the confidence interval is to
+determine if there is evidence that a response surface deviates
+significantly from additivity:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">braidrm</span>(measure <span class="sc">~</span> concA <span class="sc">+</span> concB, additiveExample, <span class="at">getCIs=</span><span class="cn">TRUE</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; braidrm.formula(formula = measure ~ concA + concB, data = additiveExample, </span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt;     getCIs = TRUE)</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt;            Lo     Est     Hi</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; IDMA   0.6892  0.8036 0.9146</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co">#&gt; IDMB   0.8303  0.9536 1.0949</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co">#&gt; na     1.8645  2.4200 3.1225</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co">#&gt; nb     2.0822  2.6070 3.2912</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co">#&gt; kappa -0.4672 -0.2071 0.0327</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="co">#&gt; E0    -0.0567  0.0029 0.0500</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co">#&gt; EfA    0.9471  0.9948 1.0269</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co">#&gt; EfB    0.9540  1.0020 1.0348</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt; Ef         NA  1.0020     NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">braidrm</span>(measure <span class="sc">~</span> concA <span class="sc">+</span> concB, synergisticExample, <span class="at">getCIs=</span><span class="cn">TRUE</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; braidrm.formula(formula = measure ~ concA + concB, data = synergisticExample, </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;     getCIs = TRUE)</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;            Lo     Est     Hi</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; IDMA   0.8923  1.0398 1.1670</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; IDMB   0.8533  1.0259 1.1826</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; na     2.4488  2.9116 3.7619</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; nb     2.0568  2.4990 3.1287</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; kappa  1.6776  2.1258 2.6156</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; E0    -0.0826 -0.0300 0.0187</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; EfA    0.9375  1.0080 1.0256</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; EfB    0.9115  0.9848 1.0253</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt; Ef         NA  1.0080     NA</span></span></code></pre></div>
+<p>In the first (additive) example, though the fitted value of <span class="math inline">\(\kappa\)</span> is slightly negative, the
+confidence interval encloses 0, indicting no clear deviation from
+additivity. In the second (synergistic) example, the confidence interval
+on <span class="math inline">\(\kappa\)</span> lies well above zero,
+giving more clear evidence of synergy.</p>
+<p>Note that bootstrapped confidence intervals are constructed through
+random sampling; this means that estimating confidence intervals, even
+on identical data, will generally produce slightly different values. It
+is therefore important to remember that confidence intervals are useful
+guidelines, not fundamental truths. Those who wish to generate
+replicatable confidence intervals can do so by explicitly fixing the
+random seed using <code>set.seed()</code>.</p>
+<p>By default, confidence intervals are estimated whenever a surface is
+fit using <code>braidrm()</code> or <code>findBestBraid()</code>; this
+can be disabled by setting the parameter <code>getCIs</code> to
+<code>FALSE</code>. Though we recommend always estimating and examining
+confidence intervals in a first pass analysis or report, including
+confidence intervals is not <em>always</em> required. And because
+estimating the confidence intervals requires re-fitting a response
+surface hundreds of times, including them can add a significant amount
+of time to an analysis process for large numbers of surfaces.</p>
+<p>If a fit is performed without confidence intervals, they can always
+be added after the fact using <code>calcBraidBootstrap()</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>bfit <span class="ot">&lt;-</span> <span class="fu">braidrm</span>(measure <span class="sc">~</span> concA <span class="sc">+</span> concB, antagonisticExample, <span class="at">getCIs =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">summary</span>(bfit)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; braidrm.formula(formula = measure ~ concA + concB, data = antagonisticExample, </span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt;     getCIs = FALSE)</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;           Est</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; IDMA   0.9963</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; IDMB   0.9926</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; na     2.8385</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; nb     2.8984</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; kappa -1.0137</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; E0    -0.0102</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; EfA    0.9908</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; EfB    0.9768</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; Ef     0.9908</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>bfit_ci <span class="ot">&lt;-</span> <span class="fu">calcBraidBootstrap</span>(bfit)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">summary</span>(bfit_ci)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; braidrm.formula(formula = measure ~ concA + concB, data = antagonisticExample, </span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;     getCIs = FALSE)</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;            Lo     Est      Hi</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; IDMA   0.9019  0.9963  1.0836</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; IDMB   0.8981  0.9926  1.0829</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; na     2.3428  2.8385  3.6209</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; nb     2.3095  2.8984  3.5318</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; kappa -1.1204 -1.0137 -0.8873</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; E0    -0.0538 -0.0102  0.0223</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; EfA    0.9610  0.9908  1.0237</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; EfB    0.9533  0.9768  1.0050</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; Ef         NA  0.9908      NA</span></span></code></pre></div>
+</div>
+<div id="confidence-intervals-on-derived-quantities" class="section level2">
+<h2>Confidence Intervals on Derived Quantities</h2>
+<p>Though evaluating parameter fits (particularly <span class="math inline">\(\kappa\)</span>) is the most common use of
+confidence intervals, there are many cases in which it is useful to add
+a confidence interval to some other property or derived value from a
+response surface. This may be as simple as the predicted effect for a
+particular dose pair, or a more complex aggregate measure of a response
+surface such as the index of achievable efficacy (IAE). These derived
+confidence intervals can be estimated from the existing bootstrapped
+coefficients of a BRAID fit object using the function
+<code>calcBraidConfInt()</code>. The function takes a BRAID fit (with
+confidence intervals) and a function specifying the derived value from a
+BRAID parameter vector:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># CI on the predicted effect at dose pair (10, 10)</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">calcBraidConfInt</span>(bfit_ci, <span class="cf">function</span>(p) <span class="fu">evalBraidModel</span>(<span class="dv">10</span>,<span class="dv">10</span>,p))</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt;         Lo       Est       Hi</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;  0.9619248 0.9877667 1.017107</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co"># CI on the IAE at 50% and 90% efficacy</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">calcBraidConfInt</span>(bfit_ci,<span class="cf">function</span>(p) <span class="fu">estimateIAE</span>(p,<span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.9</span>),<span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">10</span>)))</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;            Lo      Est       Hi</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; [1,] 7.587669 8.031226 8.431710</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; [2,] 3.048281 3.480926 3.848797</span></span></code></pre></div>
+<p>If a function returns a single value, the confidence interval is
+returned as a vector of 3 values (the lower bound, the best-fit
+estimate, and the upper bound). If it returns a vector of values, the
+confidence interval is returned as a width-3 array.</p>
+<p>Of course this function can only be run on BRAID fit objects for
+which confidence intervals have already been estimated. If the
+confidence intervals are missing, the function will produce an
+error:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># `bfit` does not have confidence intervals</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">calcBraidConfInt</span>(bfit, <span class="cf">function</span>(p) <span class="fu">evalBraidModel</span>(<span class="dv">10</span>,<span class="dv">10</span>,p))</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; Error in calcBraidConfInt(bfit, function(p) evalBraidModel(10, 10, p)): Input &#39;bfit&#39; must have bootstrapped coefficients.</span></span></code></pre></div>
+</div>
+<div id="a-caveat" class="section level2">
+<h2>A Caveat</h2>
+<p>One word of warning: much like its ideological cousin, the p-value,
+the confidence interval is widely used and even more widely
+misinterpreted. Saying that the 95% confidence interval on <span class="math inline">\(\kappa\)</span> is from 2 to 4 is <em>not</em>,
+<strong>not</strong>, NOT saying that there is a 95% chance that <span class="math inline">\(\kappa\)</span> lies in that range. Indeed, the
+confidence interval barely says anything about the probability of <span class="math inline">\(\kappa\)</span> values in the real world at all.
+All it really says is that <em>if our model were truly correct</em>, we
+would expect to fit <span class="math inline">\(\kappa\)</span> values
+in this range 95% of the time. That first supposition is a very, very
+big one (especially given that BRAID itself is a general-purpose,
+descriptive, empirical model), so confidence intervals should always be
+viewed as suggestive indicators of stability, rather than clear
+indicators of the boundaries of truth.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

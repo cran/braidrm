@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Additional Approaches</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Additional Approaches</h1>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This will come as no surprise to anyone who has performed even a
+cursory review of the literature, but BRAID it <em>not</em> the only
+approach available for combination analysis. The debate over the best
+methods and standards for quantifying drug combinations goes back nearly
+100 years, and has yet to be truly resolved. And while we
+(unsurprisingly) feel that the BRAID method is the best method for
+comprehending combined action overall, we can certainly acknowledge that
+many circumstances call for a different approach. So we have tried, with
+the <code>braidrm</code> package, to include a set of tools for
+quantifying drug combinations using many of the most popular approaches
+available. These are certainly not the only implementations of these
+metrics and models, but it is our hope that they are still sufficiently
+flexible to be of use.</p>
+</div>
+<div id="response-surface-methods" class="section level2">
+<h2>Response Surface Methods</h2>
+<p>Though it is the model that we have found to be the most effective as
+an analytical tool, BRAID is not the only response surface method in the
+combination analysis space. The <code>braidrm</code> package includes
+implementations of two other parametric response surface models, one
+which predates BRAID by about 25 years, and one that followed it.</p>
+<div id="the-ursa-model" class="section level3">
+<h3>The URSA Model</h3>
+<p>The universal response surface approach (URSA) was proposed by Greco,
+Park, and Rustum <span class="citation">(1990)</span> as an early
+attempt to numerically fit a quantitative model of synergy and
+antagonism to measured data. Like BRAID, it used pharmacological
+additivity as its basis, but unlike BRAID it hewed more closely to the
+precise concept of Loewe additivity. They started with the observation
+that in a Loewe additive surface the following relation always
+holds:</p>
+<p><span class="math display">\[
+1 = \frac{D_A}{{ID}_{X,A}} + \frac{D_B}{{ID}_{X,B}}
+\]</span></p>
+<p>where <span class="math inline">\({ID}_{X,A}\)</span> and <span class="math inline">\({{ID}_{X,B}}\)</span> are the doses of drug A and
+drug B that produce the same effect in isolation that the drug
+combination of <span class="math inline">\(D_A\)</span> and <span class="math inline">\(D_B\)</span> produce together. When the individual
+combinations are assumed to follow a standard Hill model, this can be
+written more explicilty (if more cumbersomely) as:</p>
+<p><span class="math display">\[
+1 = \frac{D_A}{{ID}_{M,A}\left(\frac{E-E_0}{E_f-E}\right)^{1/n_a}} +
+\frac{D_B}{{ID}_{M,B}\left(\frac{E-E_0}{E_f-E}\right)^{1/n_b}}
+\]</span></p>
+<p>The URSA model generalized this relationship to allow for synergistic
+and antagonistic interactions by adding an interaction term that is
+<em>very nearly</em> a classic product term:</p>
+<p><span class="math display">\[
+1 = \frac{D_A}{{ID}_{M,A}\left(\frac{E-E_0}{E_f-E}\right)^{1/n_a}} +
+\frac{D_B}{{ID}_{M,B}\left(\frac{E-E_0}{E_f-E}\right)^{1/n_b}} +
+\alpha\frac{D_AD_B}{{ID}_{M,A}{ID}_{M,B}\left(\frac{E-E_0}{E_f-E}\right)^{1/{2n_a}}\left(\frac{E-E_0}{E_f-E}\right)^{1/{2n_b}}}
+\]</span></p>
+<p>When <span class="math inline">\(alpha\)</span> is positive, less of
+both doses is needed to sum to a full 1, so lower combined doses produce
+the same effect, resulting in synergy. When <span class="math inline">\(alpha\)</span> is negative, the doses must be
+increased to reach the full value of 1, resulting in antagonism.</p>
+<p>The URSA model can be fit to combination data using the
+<code>fitUrsaModel()</code> function:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>ufit1 <span class="ot">&lt;-</span> <span class="fu">fitUrsaModel</span>(measure <span class="sc">~</span> concA<span class="sc">+</span>concB, additiveExample)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">coef</span>(ufit1)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt;         IDMA         IDMB           na           nb        alpha           E0 </span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt;  0.847395180  0.990519924  2.378979964  2.690630700 -0.153006078  0.001130186 </span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt;           Ef </span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt;  1.002739329</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>ufit2 <span class="ot">&lt;-</span> <span class="fu">fitUrsaModel</span>(measure <span class="sc">~</span> concA<span class="sc">+</span>concB, synergisticExample)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">coef</span>(ufit2)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;        IDMA        IDMB          na          nb       alpha          E0 </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;  0.99993303  1.01984863  2.21919208  2.16306644  8.25168963 -0.03841135 </span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;          Ef </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;  0.99986881</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>ufit3 <span class="ot">&lt;-</span> <span class="fu">fitUrsaModel</span>(measure <span class="sc">~</span> concA<span class="sc">+</span>concB, antagonisticExample)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">coef</span>(ufit3)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;         IDMA         IDMB           na           nb        alpha           E0 </span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt;  1.450038016  1.547877012  3.208442983  2.654243308 -0.292355825  0.004973926 </span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;           Ef </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;  0.992736539</span></span></code></pre></div>
+<p>Encouraginly, the URSA model fits the additive surface with an <span class="math inline">\(alpha\)</span> near 0, the synergistic surface
+with a clearly positive <span class="math inline">\(alpha\)</span> and
+the antagonistic surface with a negative <span class="math inline">\(alpha\)</span>. However, the modle does suffer
+some significiant limitations.</p>
+<p>Because it is an extension of Loewe additivity, it is hindered by the
+same constraints, most notably that the maximal effects of both drugs
+must be identical for surface to be definable at all. Further, because
+URSA, like Loewe additivity, is defined by an insoluble
+<em>implicit</em> equation, evaluation of the surface is necessarily a
+numerical approximation, which is both slow and difficult to extend to
+other tasks that require derivatives. Finally, while we have included
+antagonistic URSA surfaces (with <span class="math inline">\(alpha\)</span> ranging down to <span class="math inline">\(-1\)</span>), the product term in the URSA
+equation actually produces undefined values at high doses for
+<em>any</em> negative <span class="math inline">\(alpha\)</span> value,
+so predictions of the model at high doses should be treated with
+caution.</p>
+</div>
+<div id="the-musyc-model" class="section level3">
+<h3>The MuSyC Model</h3>
+<p>Proposed much more recently, the Multidimensional Synergy of
+Combinations (or MuSyC) model of Wooten <em>et al.</em> <span class="citation">(2021)</span> is a beautifully versatile response
+surface model that can be fit with up to twelve free parameters in its
+most flexible form. Though it is described as a synthesis of all
+competing methods, it is best understood as an extension of the
+principles of Bliss independence (albeit a very significant
+generalization of Bliss surfaces). The model treats a combined therapy
+as a four-state system, in which the measured target (cells, organisms,
+bound proteins, etc.) transitions between the four states as a function
+of the two drug concentrations. The four states are:</p>
+<ul>
+<li><span class="math inline">\(U\)</span>: Targets unaffected by either
+drug</li>
+<li><span class="math inline">\(A_1\)</span> Targets affected by drug 1,
+but not drug 2</li>
+<li><span class="math inline">\(A_2\)</span>: Targets affected by drug
+2, but not drug 1</li>
+<li><span class="math inline">\(A_{12}\)</span>: Targets affected by
+both drugs</li>
+</ul>
+<p>Each of these states produces a distinct level of the measured
+effect, and the overal measured effect is a weight average of those four
+governed by the relative occupancy of the four states. The simplest form
+would simply assume that any affected state would produce a 100% effect,
+so the measured effect would simply be the total proportion of targest
+that are affected in any way; but the strength of the MuSyC models is
+that each of these values can be numerically varied to produce a much
+wider range of observed behaviors, inlcuding partial and observed
+behaviors.</p>
+<p>Interaction in the combination is modeled in several ways. First,
+because the effect level measured in state <span class="math inline">\(A_{12}\)</span> can differ from the maximal
+effects resulting from either drug, the combinatoin can have a higher
+(or even lower) maximal effect than the individual agents. Wooten <em>et
+al.</em> refer to this as “efficacy synergy”, and while it can be
+included in the full BRAID model, it is much less a component of
+traditional BRAID analysis. Second, because the pharmacological
+transitions induced by each drug can differ depending on whether they
+are already affected by the other drug, the effect of one drug can
+potentiate the effect of the other; a phenomenon Wooten <em>et al.</em>
+refer to as “potency synergy”. (It is also possible for the effect of
+one drug to alter the <em>Hill slope</em> of the other, but this is much
+more difficult to analyze, and is usually not included.)</p>
+<p>Similar to URSA, the MuSyC model can be fit to combination data using
+the <code>fitMusycModel()</code> function:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>mfit1 <span class="ot">&lt;-</span> <span class="fu">fitMusycModel</span>(measure <span class="sc">~</span> concA<span class="sc">+</span>concB, additiveExample)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">coef</span>(mfit1)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;         IDMA         IDMB           na           nb      alpha12      alpha21 </span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;  0.800139368  0.949387585  1.943812580  2.261862297  2.060378090  1.621066302 </span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;           E0          EfA          EfB           Ef </span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; -0.008523318  1.027721216  1.037863582  0.972305644</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>mfit2 <span class="ot">&lt;-</span> <span class="fu">fitMusycModel</span>(measure <span class="sc">~</span> concA<span class="sc">+</span>concB, synergisticExample)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">coef</span>(mfit2)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;        IDMA        IDMB          na          nb     alpha12     alpha21 </span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt;  1.19668859  0.96655322  1.52782988  2.26339095 18.64303977 18.85244067 </span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt;          E0         EfA         EfB          Ef </span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; -0.05573616  1.11679988  0.99075362  0.99841452</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>mfit3 <span class="ot">&lt;-</span> <span class="fu">fitMusycModel</span>(measure <span class="sc">~</span> concA<span class="sc">+</span>concB, antagonisticExample)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">coef</span>(mfit3)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;        IDMA        IDMB          na          nb     alpha12     alpha21 </span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; 1.265611199 1.240076136 2.965970304 2.977843271 0.019376190 0.048681256 </span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;          E0         EfA         EfB          Ef </span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; 0.001749911 0.997186076 0.957373529 1.106652844</span></span></code></pre></div>
+<p>Encouragingly, the MuSyC fits posit no significant efficacy synergy,
+as the underlying surfaces all share the same maximal effect. The
+potency synergy parameters <span class="math inline">\(\alpha_{12}\)</span> and <span class="math inline">\(\alpha_{21}\)</span>, however, show more
+distinction. These parameters represent the degree to which the effect
+of one drug increase the potency of the other; with <span class="math inline">\(\alpha_{12}\)</span> representing the degree to
+which being affected by drug 1 increases the potency of drug2, and <span class="math inline">\(\alpha_{21}\)</span> representing the reverse.
+(Unlike BRAID, MuSyC can represent synergies operating in both
+directions.) These values are well above the baseline 1 for the
+synergistic surface, and well below 1 for the antagonistic surface. The
+model does posit some slight synergy even for the additive surface, but
+this is unsurprising as additive surfaces with higher Hill slopes are
+often marked as synergistic by Bliss-based and Bliss-inspired
+methods.</p>
+<p>Though it is quite flexible and very powerful, we have still found
+BRAID to be a more reliable method overall. The high-dimensionality of
+the interaction in MuSyC (with three or even five different parameters
+governing interaction) makes an intuitive understanding of the
+interactions difficult, and comparison across surfaces nearly
+impossible. While we agree that potency synergy and efficacy synergy are
+distinct, and deserve to be treated as such, we have found efficacy
+synergy to be more rare, and in most cases very difficult to distinguish
+from more basic potentiation. Additionally, the basis of the model
+around Bliss independence, however implicit, is out of sync with our
+overall experience that additivity is generally a better, ess biased
+zero point. Nevertheless, we frequently make use of the MuSyC model in
+our work, particularly when quantifying efficacy synergy directly is
+desired, and hope that users of the <code>braidrm</code> package will
+make use of MuSyC as well.</p>
+</div>
+</div>
+<div id="the-deviation-methods" class="section level2">
+<h2>The Deviation Methods</h2>
+<p>In its most basic form, pharmacological “synergy” is defined as an
+observed effect in combination that is greater than what would be
+expected based on the effect of either drug in isolation. It makes sense
+then that many approaches to combination analysis would tackle the
+question directly, and calculate how a measured surface deviates from
+the expected, putatively non-interacting surface. We refer to these
+methods as the “deviation” methods, and they quantify synergy and
+antagonism (either at particular dose pairs or in the combination
+overall) by estimating such deviations. The primary differences between
+them are what model they use as the “expected” non-interacting surface.
+The <code>braidrm</code> package includes functions for evaluating four
+such methods: Bliss deviation, HSA deviation, Loewe deviation, and ZIP
+<span class="math inline">\(\delta\)</span>. These are described briefly
+here:</p>
+<div id="bliss-deviation" class="section level3">
+<h3>Bliss Deviation</h3>
+<p>Bliss deviation, perhaps the most commonly used deviation approach,
+quantifies the interaction in a response surface by modeling the effect
+of the two drugs as probabilistically independent events. The measured
+effect reflects the proportion of targets that are affected or
+unaffected by either drug, and the probability that a target will be
+unaffected by two doses in combination is equal to the product of the
+probabilities that it would be unaffected by each dose individually.
+This principle, Bliss independence <span class="citation">(Bliss
+1939)</span>, is expressed mathematically by the following equation:</p>
+<p><span class="math display">\[
+A_{12} = A_1 + A_2 - A_1A_2
+\]</span> where <span class="math inline">\(A_{12}\)</span> is the
+proportion of targets affected by the combination, and <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span> are the proportions affected by
+either dose individually. Bliss independence is extremely popular, due
+the intuitive nature of combining independent events and the
+mathematical simplicity of the non-interacting model.</p>
+</div>
+<div id="highest-single-agent" class="section level3">
+<h3>Highest Single Agent</h3>
+<p>Even simpler than Bliss, the highest single agent (HSA) model of
+non-interaction simply assumes that the effect of two combined doses
+will simply be the maximum of the effects of the two doses
+individually:</p>
+<p><span class="math display">\[
+A_{12} = \max\left(A_1,A_2\right)
+\]</span></p>
+<p>Despite its extreme simplicity, the model is still fairly widely
+used, often in parallel with Bliss independence as it will always
+necessarily be lower than the Bliss independent prediction.</p>
+</div>
+<div id="loewe-additive" class="section level3">
+<h3>Loewe Additive</h3>
+<p>Though Loewe-based methods are more common as response surface
+models, deviations from a Loewe additive response surface can still be
+measured directly <span class="citation">(Loewe and Muischnek
+1926)</span>. The only constraint is that the maximal effects of both
+drugs must be identical so that a Loewe additive surface is well defined
+for all dose pairs. Mathematically, Loewe additivity is defined as:</p>
+<p><span class="math display">\[
+1 = \frac{D_A}{{ID}_{X,A}} + \frac{D_B}{{ID}_{X,B}}
+\]</span></p>
+<p>where <span class="math inline">\({ID}_{X,A}\)</span> and <span class="math inline">\({{ID}_{X,B}}\)</span> are the doses of drug A and
+drug B that produce the same effect in isolation that the drug
+combination of <span class="math inline">\(D_A\)</span> and <span class="math inline">\(D_B\)</span> produce together.</p>
+</div>
+<div id="zero-interaction-potency" class="section level3">
+<h3>Zero-Interaction Potency</h3>
+<p>A more recent entry to the deviation method landscape, the
+zero-interaction potency (or ZIP) model of Yadav <em>et al.</em>
+produces a more robust measure of response surface deviation than the
+Bliss deviation method on which it is based <span class="citation">(Yadav et al. 2015)</span>. The ZIP reference surface
+is a Bliss independent surface, but before the combined effects are
+calculated, the dose-response behaviors of both individual drugs are fit
+with a Hill model to produce stabler, smoother effects.<br />
+Furthermore, before the reference surface is subtracted from them,
+individual combined measurements are replaced with smoothed values
+resulting from fitting each set of measurements with a shared dose of
+either drug with a partial dose response curve. The result, though
+mathematically identical to Bliss deviation at its center, is a
+smoother, more robust deviation surface.</p>
+</div>
+<div id="deviation-functions-in-braidrm" class="section level3">
+<h3>Deviation Functions in braidrm</h3>
+<p>All four deviation methods can be accessed using the
+<code>deviationSurface()</code> function in the <code>braidrm</code>
+package. The function produces a full deviation surface, but can be
+summed or averaged to produce an estimated deviation metric:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>concs1 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(additiveExample<span class="sc">$</span>concA,additiveExample<span class="sc">$</span>concB)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>act1 <span class="ot">&lt;-</span> additiveExample<span class="sc">$</span>measure</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">deviationSurface</span>(concs1,act1,<span class="at">method=</span><span class="st">&quot;Bliss&quot;</span>,<span class="at">range=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)))</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.03101272</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">deviationSurface</span>(concs1,act1,<span class="at">method=</span><span class="st">&quot;HSA&quot;</span>,<span class="at">increasing=</span><span class="cn">TRUE</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.033698</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">deviationSurface</span>(concs1,act1,<span class="at">method=</span><span class="st">&quot;Loewe&quot;</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; [1] -0.00859843</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">deviationSurface</span>(concs1,act1,<span class="at">method=</span><span class="st">&quot;ZIP&quot;</span>,<span class="at">range=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)))</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.02199841</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>concs2 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(synergisticExample<span class="sc">$</span>concA,additiveExample<span class="sc">$</span>concB)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>act2 <span class="ot">&lt;-</span> synergisticExample<span class="sc">$</span>measure</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">deviationSurface</span>(concs2,act2,<span class="at">method=</span><span class="st">&quot;Bliss&quot;</span>,<span class="at">range=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)))</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; [1] 0.1348243</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">deviationSurface</span>(concs2,act2,<span class="at">method=</span><span class="st">&quot;HSA&quot;</span>,<span class="at">increasing=</span><span class="cn">TRUE</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.1400639</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">deviationSurface</span>(concs2,act2,<span class="at">method=</span><span class="st">&quot;Loewe&quot;</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.09550931</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">deviationSurface</span>(concs2,act2,<span class="at">method=</span><span class="st">&quot;ZIP&quot;</span>,<span class="at">range=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)))</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.1250206</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>concs3 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(antagonisticExample<span class="sc">$</span>concA,additiveExample<span class="sc">$</span>concB)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>act3 <span class="ot">&lt;-</span> antagonisticExample<span class="sc">$</span>measure</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">deviationSurface</span>(concs3,act3,<span class="at">method=</span><span class="st">&quot;Bliss&quot;</span>,<span class="at">range=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)))</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&gt; [1] -0.06080502</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">deviationSurface</span>(concs3,act3,<span class="at">method=</span><span class="st">&quot;HSA&quot;</span>,<span class="at">increasing=</span><span class="cn">TRUE</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&gt; [1] -0.04623165</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">deviationSurface</span>(concs3,act3,<span class="at">method=</span><span class="st">&quot;Loewe&quot;</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co">#&gt; [1] -0.09061148</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">deviationSurface</span>(concs3,act3,<span class="at">method=</span><span class="st">&quot;ZIP&quot;</span>,<span class="at">range=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)))</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#&gt; [1] -0.03461665</span></span></code></pre></div>
+<p>Details about the additional parameters for each of the different
+deviation methods can be found in the documentation for
+<code>deviationSurface()</code>.</p>
+</div>
+</div>
+<div id="the-combination-index" class="section level2">
+<h2>The Combination Index</h2>
+<p>Of course no discussion of combination analysis would be complete
+without the combination index <span class="citation">(Chou and Talalay
+1984)</span>. One of the most widely cited and widely used methods for
+combination analysis, the combination index (and equivalent methods such
+as the sum of FICs <span class="citation">(Berenbaum 1989)</span>,
+observed over expected, and interaction index <span class="citation">(Berenbaum 1978)</span>) quantifies the degree of
+interaction in a combination by the extent to which constant ratio
+combinations are potentiated relative to Loewe additivity. It can be a
+bit difficult to wrap one’s head around, but briefly, the combination
+index for a given combination, for a particular <em>effect level</em>
+and a particular <em>dose ratio</em>, is the “dose” of that constant
+ratio combination required to produce that particular effect, divided by
+the dose that <em>would</em> be required were the combination purely
+additive. As a result, additive surfaces give combination indices near
+1, synergistic surfaces, being more potent, produce combination indices
+below 1, and antagonistic surfaces produce combination indices above
+1.</p>
+<p>The nature of the combination index makes specifying its inputs
+rather unwieldy, so <code>braidrm</code> defaults to an input format
+similar to that of the deviation methods. The result is a set of
+combination index values for all dose ratios at which a sufficient
+number of dose pairs were measured:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">estimateCombinationIndices</span>(concs1,act1,<span class="at">level=</span><span class="fu">c</span>(<span class="fl">0.5</span>))</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&gt;       ratio level        ci</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&gt; 1   0.03125   0.5 1.0368026</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt; 2   0.06250   0.5 1.7097139</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co">#&gt; 3   0.12500   0.5 1.0986889</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&gt; 4   0.25000   0.5 0.9882793</span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&gt; 5   0.50000   0.5 1.1712814</span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="co">#&gt; 6   1.00000   0.5 1.1092450</span></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="co">#&gt; 7   2.00000   0.5 1.0170606</span></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="co">#&gt; 8   4.00000   0.5 1.2184957</span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="co">#&gt; 9   8.00000   0.5 1.1116910</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="co">#&gt; 10 16.00000   0.5 1.9682516</span></span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="co">#&gt; 11 32.00000   0.5 0.9304184</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">estimateCombinationIndices</span>(concs2,act2,<span class="at">level=</span><span class="fu">c</span>(<span class="fl">0.5</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&gt;       ratio level        ci</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&gt; 1   0.03125   0.5 0.9590661</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&gt; 2   0.06250   0.5 0.9605823</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co">#&gt; 3   0.12500   0.5 0.8189321</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="co">#&gt; 4   0.25000   0.5 0.4848596</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="co">#&gt; 5   0.50000   0.5 0.4841046</span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="co">#&gt; 6   1.00000   0.5 0.4514821</span></span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="co">#&gt; 7   2.00000   0.5 0.5508108</span></span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co">#&gt; 8   4.00000   0.5 0.6118499</span></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co">#&gt; 9   8.00000   0.5 0.5820401</span></span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a><span class="co">#&gt; 10 16.00000   0.5 1.0159746</span></span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a><span class="co">#&gt; 11 32.00000   0.5 2.9604057</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">estimateCombinationIndices</span>(concs3,act3,<span class="at">level=</span><span class="fu">c</span>(<span class="fl">0.5</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&gt;       ratio level        ci</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#&gt; 1   0.03125   0.5 1.1286320</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&gt; 2   0.06250   0.5 1.1170305</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co">#&gt; 3   0.12500   0.5 1.4777136</span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="co">#&gt; 4   0.25000   0.5 2.0230574</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="co">#&gt; 5   0.50000   0.5 1.9749340</span></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a><span class="co">#&gt; 6   1.00000   0.5 2.0655406</span></span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="co">#&gt; 7   2.00000   0.5 1.8007224</span></span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a><span class="co">#&gt; 8   4.00000   0.5 1.4124243</span></span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a><span class="co">#&gt; 9   8.00000   0.5 1.3079284</span></span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a><span class="co">#&gt; 10 16.00000   0.5 0.9392319</span></span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a><span class="co">#&gt; 11 32.00000   0.5 0.9012544</span></span></code></pre></div>
+<p>We can see that for many dose ratios (particularly those near an
+equal mixture of drug A and drug B), the additive surface exhibits a
+combination index near 1, the synergistic surface exhibits a combination
+index around 0.5, and the antagonistic surface gives values up around 2.
+But these values are not consistent across dose ratios, and
+unfortunately, the combination index method does not expect them to be.
+The combination index, therefore, is not a robust metric describing the
+overall behavior of the surface, making it difficult to compare between
+combinations of very different dosages, Hill slopes, and potencies.</p>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-Berenbaum1978" class="csl-entry">
+Berenbaum, MC. 1978. <span>“A Method for Testing for Synergy with Any
+Number of Agents.”</span> <em>Journal of Infectious Diseases</em> 137
+(2): 122–30.
+</div>
+<div id="ref-Berenbaum1989" class="csl-entry">
+———. 1989. <span>“What Is Synergy.”</span> <em>Pharmacol Rev</em> 41:
+93–141.
+</div>
+<div id="ref-Bliss1939" class="csl-entry">
+Bliss, Chester I. 1939. <span>“The Toxicity of Poisons Applied Jointly
+1.”</span> <em>Annals of Applied Biology</em> 26 (3): 585–615.
+</div>
+<div id="ref-Chou1984" class="csl-entry">
+Chou, Ting-Chao, and Paul Talalay. 1984. <span>“Quantitative Analysis of
+Dose-Effect Relationships: The Combined Effects of Multiple Drugs or
+Enzyme Inhibitors.”</span> <em>Advances in Enzyme Regulation</em> 22:
+27–55.
+</div>
+<div id="ref-Greco1990" class="csl-entry">
+Greco, William R, Hyoung Sook Park, and Youcef M Rustum. 1990.
+<span>“Application of a New Approach for the Quantitation of Drug
+Synergism to the Combination of Cis-Diamminedichloroplatinum and 1-<span class="math inline">\(\beta\)</span>-d-Arabinofuranosylcytosine.”</span>
+<em>Cancer Research</em> 50 (17): 5318–27.
+</div>
+<div id="ref-Loewe1926" class="csl-entry">
+Loewe, S, and H Muischnek. 1926. <span>“Uber
+Kombinationswirkungen.”</span> <em>Naunyn. Schmiedebergs. Arch.
+Pharmacol.</em> 114: 313–26.
+</div>
+<div id="ref-Wooten2021" class="csl-entry">
+Wooten, David J, Christian T Meyer, Alexander LR Lubbock, Vito Quaranta,
+and Carlos F Lopez. 2021. <span>“MuSyC Is a Consensus Framework That
+Unifies Multi-Drug Synergy Metrics for Combinatorial Drug
+Discovery.”</span> <em>Nature Communications</em> 12 (1): 4607.
+</div>
+<div id="ref-Yadav2015" class="csl-entry">
+Yadav, Bhagwan, Krister Wennerberg, Tero Aittokallio, and Jing Tang.
+2015. <span>“Searching for Drug Synergy in Complex Dose–Response
+Landscapes Using an Interaction Potency Model.”</span> <em>Computational
+and Structural Biotechnology Journal</em> 13: 504–13.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Basic BRAID Usage</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Basic BRAID Usage</h1>
+
+
+
+<div id="the-braid-model" class="section level2">
+<h2>The BRAID Model</h2>
+<p>The bivariate response to additive interacting doses (or BRAID) model
+is a parametric response surface model of the effect of combined doses
+of two agents. A full specification of the BRAID equation can be found
+in <code>vignette(&quot;derivation&quot;)</code>, but briefly, the BRAID model is
+specified by 9 parameters: a baseline minimal effect observed when no
+agent is present, three dose response parameters for each agent, an
+overall maximal effect parameter, and an interaction paramter <span class="math inline">\(\kappa\)</span> indicating the presence of a
+synergistic or antagonistic interaction.</p>
+<p>In the functions of the <code>braidrm</code> package, BRAID surfaces
+are specified by a numeric parameter vector. For a full, length-9
+parameter vector, the values are the following</p>
+<ul>
+<li><code>IDMA</code>: The dose of median effect of the first agent</li>
+<li><code>IDMB</code>: The dose of median effect of the second
+agent</li>
+<li><code>na</code>: The Hill slope (or sigmoidicity) of the first
+agent</li>
+<li><code>nb</code>: The Hill slope (or sigmoidicity) of the second
+agent</li>
+<li><code>kappa</code>: The BRAID interaction parameter, which is
+between -2 and 0 for antagonistic surfaces, 0 for BRAID additive
+surfaces, and greater than 0 for synergistic surfaces</li>
+<li><code>E0</code>: The minimal effect observed when neither agent is
+present</li>
+<li><code>EfA</code>: The maximal effect of the first agent,
+theoretically observed at infinite concentration</li>
+<li><code>EfB</code>: The maximal effect of the second agent,
+theoretically observed at infinite concentration</li>
+<li><code>Ef</code>: The overall maximal effect of the combination</li>
+</ul>
+<p>The order of these parameters is meant to mirror the order of
+single-agent dose-response parameters in the <code>basicdrm</code>
+package: “potency” parameters, “shape” parameters (including
+interaction), minimal effect, maximal effects.</p>
+<p>In many cases, the response surface being modeled or studied will
+only need a subset of these parameters. Nearly all combination analyses
+assume (implicitly or explicitly) that the overall maximal effect of a
+combination (the parameter <span class="math inline">\(E_f\)</span>)
+will be equal to the “larger” of the two individual maximal effects. (We
+place “larger” in quotes here is it refers to the effect value that is
+further from the minimal effect, but not necssarily the numerically
+greater value.) In some cases, it is even assumed that all maximal
+effects are simply equal to each other. For simplicity, many
+<code>braidrm</code> functions support shortened BRAID parameter vectors
+that carry these assumptions. If a BRAID parameter vector with
+<em>eight</em> values is passed to a <code>braidrm</code> function, it
+is assumed that the ninth parameter <code>Ef</code> has been left out,
+and the it should be equal to the “larger” of the two individual maximal
+effects. If a BRAID paramter vector with <em>seven</em> values is
+passed, it is assumed that parameters <code>EfA</code> and
+<code>EfB</code> have been leftout, and that they are both equal to the
+seventh value (assumed to be <code>Ef</code>).</p>
+</div>
+<div id="evaluate-braid-surfaces" class="section level2">
+<h2>Evaluate BRAID Surfaces</h2>
+<p>Creating a BRAID parameter vector is as simple as creating a numeric
+vector:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>basicParameter <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">100</span>)</span></code></pre></div>
+<p>This vector specifies, in order, that:</p>
+<ul>
+<li>The dose of median effect of drug A is 1 (the units are not
+specified, but for this vignette we’ll assume they are micromolar)</li>
+<li>The dose of median effect of drug B is 1</li>
+<li>The Hill slope of drug A is 3</li>
+<li>The Hill slope of drug B is 3</li>
+<li>The interaction parameter <span class="math inline">\(\kappa\)</span> is 0 (additivity)</li>
+<li>The minimal effect is 0</li>
+<li>The overall maximal effect is 100</li>
+</ul>
+<p>Because this vector is length seven, parameters <code>EfA</code> and
+<code>EfB</code> are implied and assumed to be equal to <code>Ef</code>.
+We could specify exactly the same surface with a full-length parameter
+vector:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>fullParameter <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">100</span>, <span class="dv">100</span>, <span class="dv">100</span>)</span></code></pre></div>
+<p>Evaluating a BRAID surface requires the concentration or
+concentrations of the first drug, the concentration or concentrations of
+the second, and the BRAID parameter vector. For example:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">evalBraidModel</span>(<span class="dv">1</span>, <span class="dv">0</span>, basicParameter)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; [1] 50</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">evalBraidModel</span>(<span class="dv">0</span>, <span class="dv">1</span>, basicParameter)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; [1] 50</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">evalBraidModel</span>(<span class="dv">1</span>, <span class="dv">1</span>, basicParameter)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1] 88.88889</span></span></code></pre></div>
+<p>The first two outputs demonstrate that, as expected, when either drug
+is present at 1 micromolar, we observe an effect of 50, halfway between
+the minimal effect and the maximal effect. The third output is
+noticeably higher, as when <em>both</em> drugs are present at 1
+micromolar, the effect of the individual doses is compounded. We can
+however produce the same effect as 1 micromolar of either drug alone by
+halving their doses:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">evalBraidModel</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, basicParameter)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; [1] 50</span></span></code></pre></div>
+<p>This is because the parameter vector represents an additive
+combination of two drugs with identical pharmacological properties.
+(Note that this does not work for all response surfaces, or even all
+BRAID additive surfaces. It is only in the case of identical Hill slopes
+and maximal effects that BRAID additivity aligns perfectly with the more
+classical Loewe additivity.) <span class="citation">(Loewe and Muischnek
+1926)</span></p>
+<p>We can also see that using the full, length-9 parameter vector
+produces exactly the same results:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">evalBraidModel</span>(<span class="dv">1</span>, <span class="dv">0</span>, fullParameter)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; [1] 50</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">evalBraidModel</span>(<span class="dv">0</span>, <span class="dv">1</span>, fullParameter)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; [1] 50</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">evalBraidModel</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, fullParameter)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; [1] 50</span></span></code></pre></div>
+<p>Note what happens, however, when we introduce an interaction to the
+response surface (in this case, as <span class="math inline">\(\kappa\)</span> is positive, a synergistic
+interaction):</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>synergyParameter <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="fl">1.5</span>, <span class="dv">0</span>, <span class="dv">100</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">evalBraidModel</span>(<span class="dv">1</span>, <span class="dv">0</span>, synergyParameter)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; [1] 50</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">evalBraidModel</span>(<span class="dv">0</span>, <span class="dv">1</span>, synergyParameter)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt; [1] 50</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">evalBraidModel</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, synergyParameter)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; [1] 84.27518</span></span></code></pre></div>
+<p>While the effect of the individual drugs is unchanged, their combined
+effect is increased. This is the classic pharmacological definition of
+synergy: an effect in combination which is larger <em>than what would be
+expected</em>. What precisely is “expected” for any given pair of drugs
+is one of the primary debates of combination analysis; BRAID additivity
+is only one answer, albeit the one around which we have built the BRAID
+system.</p>
+</div>
+<div id="fitting-braid-surfaces" class="section level2">
+<h2>Fitting BRAID Surfaces</h2>
+<p>Of course, the most common usage of the BRAID model is fitting it to
+experimental data to summarize and quantify that data. The main
+workhorse function for this task is <code>braidrm</code>, which produces
+a fit object of class <code>braidrm</code>. We can see it in action with
+the example data-set <code>additiveExample</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">head</span>(additiveExample)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&gt;   concA concB       truth     measure</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt; 1     0 0.000 0.000000000  0.09014655</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; 2     0 0.125 0.001949318 -0.07605997</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; 3     0 0.250 0.015384615 -0.07342708</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; 4     0 0.500 0.111111111  0.18117181</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; 5     0 1.000 0.500000000  0.55059399</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; 6     0 2.000 0.888888889  0.90448671</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>additiveFit <span class="ot">&lt;-</span> <span class="fu">braidrm</span>(measure <span class="sc">~</span> concA <span class="sc">+</span> concB, additiveExample)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">summary</span>(additiveFit)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; braidrm.formula(formula = measure ~ concA + concB, data = additiveExample)</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt;            Lo     Est     Hi</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; IDMA   0.6820  0.8036 0.9442</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; IDMB   0.8082  0.9536 1.1083</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt; na     2.0211  2.4200 3.1179</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt; nb     2.0755  2.6070 3.4491</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt; kappa -0.4527 -0.2071 0.0827</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co">#&gt; E0    -0.0609  0.0029 0.0591</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt; EfA    0.9531  0.9948 1.0287</span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt; EfB    0.9503  1.0020 1.0334</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt; Ef         NA  1.0020     NA</span></span></code></pre></div>
+<p>The data frame <code>additiveExample</code> is a synthetically
+generated set of response surface measurements, and contains four
+columns: <code>concA</code>, containing the dose of drug A for each
+measurement; <code>concB</code>, containing the dose of drug B for each
+measurement; <code>truth</code> containing the ground truth response
+generated by an additive response surface with effect ranging from 0 to
+1; and <code>measure</code>, a noisy measurement sampled from a normal
+distribution centered on the ground truth with a standard deviation of
+0.07. By default, <code>braidrm()</code> fits an eight-paramter BRAID
+surface (one which assumes the overall maximal effect is equal to the
+larger of the two individual maximal effects) to the given data with a
+moderate prior on the interaction parameter <span class="math inline">\(\kappa\)</span>. (See
+<code>vignette(&quot;modelsAndConstraints&quot;)</code> for more details on
+specifying the BRAID model to be fit, and
+<code>vignette(&quot;bayesianKappa&quot;)</code> for a more in-depth explanation
+of the Bayesian stabilization of <span class="math inline">\(\kappa\)</span>). By default
+<code>braidrm()</code> also estimates bootstrapped confidence intervals
+on all fit parameters, as can be seen the printed summary; note in
+particular that 0 lies within the confidence interval on <span class="math inline">\(\kappa\)</span>, indicating no statistically
+significant deviation from BRAID additivity. (Estimating confidence
+intervals can take several seconds; so if you are running many fits and
+do not need the confidence intervals, you can forgo them by setting the
+parameter <code>getCIs</code> to <code>FALSE</code>.)</p>
+<p>We get a very different result, however, when we fit the example
+data-set <code>synergisticExample</code>, which has the same format as
+<code>additiveExample</code> but was generated with a synergistic
+parameter vector with a <span class="math inline">\(\kappa\)</span> of
+2:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>synergisticFit <span class="ot">&lt;-</span> <span class="fu">braidrm</span>(measure <span class="sc">~</span> concA <span class="sc">+</span> concB, synergisticExample)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">summary</span>(synergisticFit)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; braidrm.formula(formula = measure ~ concA + concB, data = synergisticExample)</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt;            Lo     Est     Hi</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt; IDMA   0.9087  1.0398 1.1765</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; IDMB   0.8897  1.0259 1.2158</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; na     2.3985  2.9116 3.7821</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; nb     2.0480  2.4990 3.1903</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt; kappa  1.6173  2.1258 2.5755</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; E0    -0.0818 -0.0300 0.0187</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; EfA    0.9552  1.0080 1.0274</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; EfB    0.9144  0.9848 1.0224</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt; Ef         NA  1.0080     NA</span></span></code></pre></div>
+<p>Though most of the parameter estimates are very similar (indeed the
+generating parameter vectors are identical except for <span class="math inline">\(\kappa\)</span>), the confidence interval on <span class="math inline">\(\kappa\)</span> lies well above zero, centered
+quite close the true value of 2.</p>
+<p>Another useful fitting function is <code>findBestBraid()</code>,
+which uses the Bayesian or Akaike information criterion to select among
+several candidate models (again, see
+<code>vignette(&quot;modelsAndConstraints&quot;)</code> for more details) <span class="citation">Akaike (1974)</span>. This allows the user to stabilize
+underdetermined values to reasonable defaults and reduces the frequency
+of wildly implausible over-fitting. We have run the function on
+<code>antagonisticExample</code>, which, as the name implies, contains a
+synthetically generated set of response surface measurements taken on an
+antagonistic response surface with a true <span class="math inline">\(\kappa\)</span> of <span class="math inline">\(-1\)</span>. The usage of
+<code>findBestBraid()</code> is very similar to that of
+<code>braidrm()</code>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>bestFit <span class="ot">&lt;-</span> <span class="fu">findBestBraid</span>(measure <span class="sc">~</span> concA <span class="sc">+</span> concB, antagonisticExample,</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>                         <span class="at">defaults =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">summary</span>(bestFit)</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&gt; findBestBraid.formula(formula = measure ~ concA + concB, data = antagonisticExample, </span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#&gt;     defaults = c(0, 1))</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="co">#&gt;            Lo     Est      Hi</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="co">#&gt; IDMA   0.9651  1.0210  1.1417</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="co">#&gt; IDMB   0.9590  1.0267  1.1645</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co">#&gt; na     2.4189  2.8288  3.3656</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co">#&gt; nb     2.3304  2.6675  3.0672</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="co">#&gt; kappa -1.1236 -1.0175 -0.8834</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co">#&gt; E0         NA  0.0000      NA</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#&gt; EfA        NA  1.0000      NA</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#&gt; EfB        NA  1.0000      NA</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co">#&gt; Ef         NA  1.0000      NA</span></span></code></pre></div>
+<p>The <code>defaults</code> parameter here indicates that, absent any
+other evidence, we expect the minimal effect to 0 and the maximal
+effects to be 1, so simpler models that assume these fixed values and
+explain the data equally well should be preferred. This time the
+confidence interval on <span class="math inline">\(\kappa\)</span> lies
+well below zero and comfortably encloses the true value of <span class="math inline">\(-1\)</span>. No confidence intervals on either
+minimal or maximal effects are included, indicating that the most
+parsimonious model was one which fixed <code>E0</code> at 0 and the
+three maximal effects at the default 1.</p>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-Akaike1974" class="csl-entry">
+Akaike, Hirotugu. 1974. <span>“A New Look at the Statistical Model
+Identification.”</span> <em>IEEE Transactions on Automatic Control</em>
+19 (6): 716–23.
+</div>
+<div id="ref-Loewe1926" class="csl-entry">
+Loewe, S, and H Muischnek. 1926. <span>“Uber
+Kombinationswirkungen.”</span> <em>Naunyn. Schmiedebergs. Arch.
+Pharmacol.</em> 114: 313–26.
+</div>
+<div id="ref-Schwarz1978" class="csl-entry">
+Schwarz, Gideon. 1978. <span>“Estimating the Dimension of a
+Model.”</span> <em>The Annals of Statistics</em>, 461–64.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
