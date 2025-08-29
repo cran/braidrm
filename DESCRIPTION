@@ -1,6 +1,6 @@
 Package: braidrm
 Title: Fitting Combined Action with the BRAID Response Surface Model
-Version: 1.0.3
+Version: 1.0.6
 Authors@R: c(
     person("Anang", "Shelat", email = "anang.shelat@stjude.org", role = c("aut")),
     person("Nathaniel R.", "Twarog", email ="nathaniel.twarog@stjude.org", role = c("aut", "cre")))
@@ -13,15 +13,15 @@ License: GPL (>= 3)
 Encoding: UTF-8
 RoxygenNote: 7.3.1
 Config/Needs/website: rmarkdown
-Depends: R (>= 3.10)
+Depends: R (>= 3.0)
 LazyData: true
 Suggests: braidReports (>= 1.0.0), knitr, rmarkdown
 VignetteBuilder: knitr
 Imports: basicdrm, stats
 NeedsCompilation: no
-Packaged: 2024-09-26 15:34:15 UTC; ntwarog
+Packaged: 2025-08-29 16:54:52 UTC; ntwarog
 Author: Anang Shelat [aut],
   Nathaniel R. Twarog [aut, cre]
 Maintainer: Nathaniel R. Twarog <nathaniel.twarog@stjude.org>
 Repository: CRAN
-Date/Publication: 2024-09-26 21:00:41 UTC
+Date/Publication: 2025-08-29 18:20:17 UTC
